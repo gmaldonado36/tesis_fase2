@@ -1,0 +1,56 @@
+import streamlit as st
+from services.image_loader import load_random_images
+import os
+from PIL import Image
+from config import FASE2_FOLDER
+
+def run():
+    st.title("Fase 2 - Reconocimiento de Imágenes")
+    
+    # Inicializar imágenes si no existen
+    if not st.session_state.imagenes_fase2:
+        st.session_state.imagenes_fase2 = load_random_images(FASE2_FOLDER)
+        st.session_state.index_fase2 = 0
+        st.session_state.respuestas_fase2 = []
+    
+    # Verificar si terminamos
+    if st.session_state.index_fase2 >= len(st.session_state.imagenes_fase2):
+        st.session_state.fase = "gracias"
+        st.rerun()
+        return
+    
+    idx = st.session_state.index_fase2
+    img_name = st.session_state.imagenes_fase2[idx]
+    img_path = os.path.join(FASE2_FOLDER, img_name)
+    
+    total = len(st.session_state.imagenes_fase2)
+    st.progress((idx) / total, text=f"Imagen {idx + 1} de {total}")
+    
+    # Mostrar imagen
+    img = Image.open(img_path)
+    img.thumbnail((900, 900))
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image(img, use_container_width=True)
+    
+    st.markdown("### ¿Usted ya ha visto esta imagen?")
+    
+    col_yes, col_no = st.columns(2)
+    
+    with col_yes:
+        if st.button("Sí", key="btn_si_fase2", use_container_width=True):
+            guardar_respuesta(img_name, "Si")
+    
+    with col_no:
+        if st.button("No", key="btn_no_fase2", use_container_width=True):
+            guardar_respuesta(img_name, "No")
+
+def guardar_respuesta(img_name, respuesta):
+    st.session_state.respuestas_fase2.append({
+        "imagen": img_name,
+        "respuesta": respuesta
+    })
+    st.session_state.index_fase2 += 1
+    st.rerun()
+
