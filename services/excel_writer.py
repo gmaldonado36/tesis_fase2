@@ -81,7 +81,6 @@ def write_to_google_sheets():
                     all_imagenes.append(imagenes[i] if i < len(imagenes) else "")
                     all_respuestas.append(respuestas[i])
 
-                all_tiempos.append(round(tiempos[i], 2) if i < len(tiempos) else "")
 
         df = pd.DataFrame({
             "run_id": all_run_ids,
