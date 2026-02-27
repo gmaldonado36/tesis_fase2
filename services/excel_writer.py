@@ -46,20 +46,17 @@ def write_to_google_sheets():
         all_nombres = []
         all_fases = []
         all_imagenes = []
-        all_tiempos = []
         all_respuestas = []
 
         fases_config = [
             {
                 "fase": 1,
                 "imagenes": st.session_state.get("imagenes_fase1", []),
-                "tiempos": st.session_state.get("tiempos_fase1", []),
                 "respuestas": st.session_state.get("respuestas_fase1", []),
             },
             {
                 "fase": 2,
                 "imagenes": st.session_state.get("imagenes_fase2", []),
-                "tiempos": st.session_state.get("tiempos_fase2", []),
                 "respuestas": st.session_state.get("respuestas_fase2", []),
             },
         ]
@@ -67,7 +64,6 @@ def write_to_google_sheets():
         for fase_data in fases_config:
             fase_num = fase_data["fase"]
             imagenes = fase_data["imagenes"]
-            tiempos = fase_data["tiempos"]
             respuestas = fase_data["respuestas"]
 
             n = len(respuestas)
@@ -92,7 +88,6 @@ def write_to_google_sheets():
             "nombre_usuario": all_nombres,
             "fase": all_fases,
             "imagen": all_imagenes,
-            "tiempo_segundos": all_tiempos,
             "respuesta": all_respuestas,
         })
 
@@ -111,7 +106,6 @@ def write_to_google_sheets():
                 "nombre_usuario",
                 "fase",
                 "imagen",
-                "tiempo_segundos",
                 "respuesta",
             ])
 
